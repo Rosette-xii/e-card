@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Poppins:wght@300;400&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', 'Noto Sans TC', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            margin: 0 auto;
+            width: 1200px;
+
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        li {
+            line-height: 1.5;
+            font-size: 24px;
+        }
+
+        li:last-child span {
+            padding-left: 32px;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        h1 {
+            width: 430px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 400;
+        }
+
+        h3 {
+            width: 400px;
+            margin-right: -18px;
+            padding-top: 8px;
+            font-size: 54px;
+            letter-spacing: 16px;
+            font-weight: 300;
+        }
+
+        button {
+            display: block;
+            margin: 24px auto;
+            padding: 8px 36px;
+            border: none;
+            font-size: 20px;
+            color: #fff;
+            background-color: #000;
+            cursor: pointer;
+            transition: all .1s ease;
+        }
+
+        button:hover {
+            background-color: tomato;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            font-size: 18px;
+        }
+
+        input {
+            width: 300px;
+            padding: 8px;
+        }
+
+        .specific {
+            width: 1000px;
+            height: 557px;
+            margin: 24px auto;
+            padding: 70px 65px 40px 65px;
+            border: 1px solid #aaa;
+            background-color: #fff;
+            position: relative;
+            font-weight: 300;
+        }
+
+        .d-flex {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+
+        .abbreviation {
+            width: 20px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .address {
+            line-height: 1.2;
+
+        }
+
+        .address span {
+            font-size: 22px;
+        }
+
+        .name {
+            position: absolute;
+            top: 75px;
+            right: 65px;
+            text-align: right;
+        }
+
+        .title {
+            font-size: 20px;
+            line-height: 1.2;
+        }
+
+        .addMargin {
+            margin-right: -8px;
+        }
+
+        .enName {
+            margin-right: -1px;
+            font-size: 25px;
+        }
+
+        .infoForm {
+            margin: 0 auto;
+            justify-content: center;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .infoForm li {
+            margin: 0 24px 10px 0;
+        }
+
+        .infoForm span {
+            font-size: 12px;
+            color: tomato;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div id="capture" class="specific">
+                <div class="d-flex">
+                    <h1>
+                        <img src="./asset/logo.jpg" alt="logo">
+                    </h1>
+                    <div class="info">
+                        <h2>得利影視股份有限公司</h2>
+                        <ul>
+                            <li><span class="abbreviation">E</span> : {{data[5].value}}</li>
+                            <li><span class="abbreviation">T</span> : {{data[6].value}}</li>
+                            <li v-if="data[7].value"><span class="abbreviation">M</span> : {{data[7].value}}</li>
+                            <li><span class="abbreviation">F</span> : {{data[8].value}}</li>
+                            <li class="address">10452 台北市中山區民權西路53號10樓<br>
+                                <span>10F, No.53, Ming Chuan W. Road, Taipei, Taiwan, 10452 R.O.C.</span>
+                            </li>
+                            <li>統一編號：89398566<span v-if="data[9].value">Line ID : {{data[9].value}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="name">
+                    <p class="title">{{data[0].value}} {{data[1].value}}<br>
+                        <span v-if="data[2].value">{{data[2].value}}</span>
+                    </p>
+                    <h3>{{data[3].value}}</h3>
+                    <p class="enName">{{data[4].value}}</p>
+                </div>
+            </div>
+            <ul class="infoForm">
+                <li v-for="i in data" :key="i.id">
+                    <label :for="i.label">{{i.label}}<span v-if="i.required">(必填)</span></label>
+                    <input :id="i.label" type="text" v-model="i.value" :required="i.required"
+                        :placeholder="i.placeholder">
+                </li>
+            </ul>
+            <button type="submit" @click.prevent="catchCanva" id="btnSave">下載名片</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.17/dist/sweetalert2.all.min.js"></script>
+    <script src="https://superal.github.io/canvas2image/canvas2image.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        Vue.config.productionTip = false
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    data: [
+                        {
+                            id: 1,
+                            label: '中文部門',
+                            value: '部門',
+                            required: true,
+                            placeholder: '行政部'
+                        },
+                        {
+                            id: 2,
+                            label: '中文職稱',
+                            value: '職稱',
+                            required: true,
+                            placeholder: '專員、主任、經理...'
+                        },
+                        {
+                            id: 3,
+                            label: '英文職稱',
+                            value: '',
+                            required: false,
+                            placeholder: 'English Title'
+                        },
+                        {
+                            id: 4,
+                            label: '中文姓名',
+                            value: '姓名',
+                            required: true,
+                        },
+                        {
+                            id: 5,
+                            label: '英文姓名',
+                            value: '',
+                            required: false,
+                            placeholder: 'English Name'
+                        },
+                        {
+                            id: 6,
+                            label: 'Email',
+                            value: '@deltamac.com.tw',
+                            required: true,
+                            placeholder: 'example@deltamac.com.tw'
+                        },
+                        {
+                            id: 7,
+                            label: '公司電話',
+                            value: '+886-2-2596-2866 ext. ',
+                            required: true,
+                            placeholder: '+886-2-2596-2866 ext. 123'
+                        },
+                        {
+                            id: 8,
+                            label: '手機',
+                            value: '',
+                            required: false,
+                            placeholder: '+886-981-654-321'
+                        },
+                        {
+                            id: 9,
+                            label: '傳真',
+                            value: '+886-2-',
+                            required: true,
+                            placeholder: '+886-2-2596-4829'
+
+                        },
+                        {
+                            id: 10,
+                            label: 'lineID',
+                            value: '',
+                            required: false,
+                        },
+
+                    ],
+                }
+            },
+            methods: {
+                catchCanva: function () {
+                    const isEmpty = this.data.filter((i) => i.required).some((i) => i.value === "");
+                    if (isEmpty) {
+                        Swal.fire({
+                            title: "請輸入必填欄位",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1000,
+                        });
+                    } else {
+                        html2canvas(document.querySelector('#capture'), {
+                            onrendered: function (canvas, width, height, name) {
+                                Canvas2Image.saveAsJPEG(canvas, 1000, 557, "image")
+                            }
+                        })
+                    }
+                },
+            },
+        })
+    </script>
+</body>
+
+</html>
